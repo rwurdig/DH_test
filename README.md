@@ -1,6 +1,6 @@
 # HumanDesign App Skeleton
 
-Este repositório contém um esqueleto simples de um aplicativo Android em Kotlin utilizando Jetpack Compose. É inspirado no aplicativo de exemplo "Human Design" citado pelo usuário. O código baseia-se em uma atividade principal que exibe uma saudação.
+Este repositório contém um esqueleto simples de um aplicativo Android em Kotlin utilizando Jetpack Compose. É inspirado em exemplo "Human Design" citado pelo usuário. O código baseia-se em uma atividade principal que exibe uma saudação.
 
 ## Estrutura
 - `settings.gradle` define o projeto principal e inclui o módulo `app`.

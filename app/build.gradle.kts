@@ -1,3 +1,4 @@
+// filepath: c:\Users\rwurd\OneDrive\Área de Trabalho\Paula\DH\DH_test\app\build.gradle.kts
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)

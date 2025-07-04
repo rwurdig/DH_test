@@ -1,67 +1,74 @@
+@Suppress("DSL_SCOPE_VIOLATION")           // for version‑catalog aliases
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
-    compileSdkVersion 34
-    namespace 'com.example.humandesign'
+    namespace = "com.rwurdig.hdbodygraph"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId "com.example.humandesign"
-        minSdkVersion 24
-        targetSdkVersion 34
-        versionCode 1
-        versionName "1.0"
+        applicationId = "com.rwurdig.hdbodygraph"
+        minSdk = 23
+        targetSdk = 34
+        versionCode = 1
+        versionName = "0.1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables { useSupportLibrary = true }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
-    buildFeatures {
-        compose true
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+    kotlinOptions { jvmTarget = "17" }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.5.11'
+    buildFeatures { compose = true }
+    composeOptions { kotlinCompilerExtensionVersion = "1.5.11" }
+
+    packaging.resources {
+        excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
-
 }
 
 dependencies {
-    implementation "androidx.core:core-ktx:1.12.0"
-    implementation "androidx.activity:activity-compose:1.9.0"
-    implementation "androidx.compose.material3:material3:1.2.0"
- // ── Compose BOM (keeps all compose libs in sync) ──
-    implementation(platform("androidx.compose:compose-bom:2024.10.00"))   // ▲ ADD
+    // ---------- Jetpack Compose ----------
+    implementation(platform("androidx.compose:compose-bom:2024.10.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3-window-size-class")
 
-    // Material3 (Compose) ------------------------------------------------
-    implementation("androidx.compose.material3:material3")                // ▲ ADD
-    implementation("androidx.compose.material3:material3-window-size-class") // optional
-
-    // Google Places SDK --------------------------------------------------
-    implementation("com.google.android.libraries.places:places:3.2.0")    // ▲ ADD
-
-    // (keep whatever was already here, e.g. activity‑compose, SwissEph…)
     implementation("androidx.activity:activity-compose:1.9.0")
-    implementation("com.github.aloiscochard:swisseph:2.10.2")
+    implementation(libs.androidx.lifecycle.runtime.ktx)      // from version‑catalog
+
+    // ---------- Google Places SDK ----------
+    implementation("com.google.android.libraries.places:places:3.2.0")
+
+    // ---------- Human‑Design / helper libs ----------
+    implementation("com.github.aloiscochard:swisseph:2.10.2")   // Swiss‑Eph JNI
     implementation("com.github.johnpryan:timezone-mapper:1.0.0")
 
-    testImplementation("junit:junit:4.13.2")
+    // ---------- Test dependencies ----------
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.10.00"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
-
-// Optional: used only to bias autocomplete to user’s GPS position
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
-<application
-    android:name=".MyApplication"   <!-- ▲ we’ll create this class next -->
-    ... >
-    <!-- Google Places API key (fallback to strings.xml) -->
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="@string/google_maps_key"/>
